@@ -17,11 +17,7 @@ properties:
       transport: Auto
     registries:
       - server: {{acrName}}.azurecr.io
-        identity: {{userAssignedIdentity}}
-    secrets:
-      - name: app-insights-connectionstring
-        keyVaultUrl: https://{{appKeyVaultName}}.vault.azure.net/secrets/SHARED-APPINSIGHTS-CONNECTIONSTRING
-        identity: {{userAssignedIdentity}}        
+        identity: {{userAssignedIdentity}}      
   template:
     containers:
       - image: {{acrName}}.azurecr.io/image/{{imageRepoName}}:{{appVersion}}
@@ -34,7 +30,7 @@ properties:
           - name: Logging__LogLevel__Microsoft.AspNetCore
             value: "Warning" 
           - name: AppInsights__ConnectionString
-            secretRef: app-insights-connectionstring            
+            value: "InstrumentationKey=b017c421-8e58-4f3e-8d3c-3f0e2974296a;IngestionEndpoint=https://uksouth-1.in.applicationinsights.azure.com/;LiveEndpoint=https://uksouth.livediagnostics.monitor.azure.com/;ApplicationId=208245fb-288b-45b9-b18f-07c2de588583"       
         resources:
           cpu: 0.5
           memory: 1Gi
