@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenTelemetry().UseAzureMonitor(o =>
             {
                 o.ConnectionString = builder.Configuration.GetValue<string>("AppInsights:ConnectionString");
-                o.Credential = new DefaultAzureCredential();
+                //o.Credential = new DefaultAzureCredential();
             });
 builder.Services.ConfigureOpenTelemetryTracerProvider((sp, b) =>
 {
