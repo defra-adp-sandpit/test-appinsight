@@ -50,4 +50,4 @@ extends:
       testProjects: "**/TEST.Tests.csproj"
       dockerfilePath: "./Dockerfile"
     appDeployConfig:
-      filepath: ".azuredevops/TEST/container-app.yaml"
+      filepath: ".azuredevops/container-app.yaml"
