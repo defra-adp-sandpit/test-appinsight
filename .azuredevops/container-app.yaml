@@ -1,0 +1,43 @@
+type: Microsoft.App/containerApps
+identity:
+  type: 'UserAssigned'
+  userAssignedIdentities: {
+     {{userAssignedIdentity}}
+  }
+properties:
+  managedEnvironmentId: {{managedEnvironmentId}}
+  configuration:
+    ingress:
+      external: true
+      allowInsecure: false
+      targetPort: 8080
+      traffic:
+        - latestRevision: true
+          weight: 100
+      transport: Auto
+    registries:
+      - server: {{acrName}}.azurecr.io
+        identity: {{userAssignedIdentity}}
+    secrets:
+      - name: app-insights-connectionstring
+        keyVaultUrl: https://{{appKeyVaultName}}.vault.azure.net/secrets/SHARED-APPINSIGHTS-CONNECTIONSTRING
+        identity: {{userAssignedIdentity}}        
+  template:
+    containers:
+      - image: {{acrName}}.azurecr.io/image/{{imageRepoName}}:{{appVersion}}
+        name: {{imageRepoName}}
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "Production"
+          - name: Logging__LogLevel__Default
+            value: "Information"
+          - name: Logging__LogLevel__Microsoft.AspNetCore
+            value: "Warning" 
+          - name: AppInsights__ConnectionString
+            secretRef: app-insights-connectionstring            
+        resources:
+          cpu: 0.5
+          memory: 1Gi
+    scale:
+      minReplicas: 1
+      maxReplicas: 3  

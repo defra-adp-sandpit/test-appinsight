@@ -1,0 +1,53 @@
+parameters:
+  - name: deployFromFeature
+    displayName: "Deploy from Feature Branch"
+    type: boolean
+    default: false
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    exclude:
+      - test-output/*
+      - bin/*
+      - obj/*
+  drafts: false
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - "main"
+  paths:
+    exclude:
+      - test-output/*
+      - bin/*
+      - obj/*
+
+resources:
+  repositories:
+    - repository: DEFRA-ADPPipelineCommon
+      name: DEFRA/adp-pipeline-common
+      endpoint: DEFRA
+      type: github
+      ref: refs/heads/rv/apptest  
+
+extends:
+  template: /pipelines/common-aca-app-build.yaml@DEFRA-ADPPipelineCommon
+  parameters:
+    deployFromFeature: ${{ parameters.deployFromFeature }}
+    privateAgentName: ''
+    appName: 'test-appinsight'
+    appBuildConfig:
+      appFrameworkType: "dotnet"
+      frameworkVersion: "8.x"   
+      imageRepoName: "test-appinsight"
+
+      appPath: "/src"
+      projectPath: "./TEST/TEST.csproj"
+      buildProjects: "**/TEST.csproj"
+      testProjects: "**/TEST.Tests.csproj"
+      dockerfilePath: "../src/DockerFile"
+    appDeployConfig:
+      filepath: ".azuredevops/TEST/container-app.yaml"
