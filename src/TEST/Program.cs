@@ -15,7 +15,6 @@ builder.Services.AddOpenTelemetry().UseAzureMonitor(o =>
                 o.ConnectionString = builder.Configuration.GetValue<string>("AppInsights:ConnectionString");
                 string resourid = "/subscriptions/7dc5bbdf-72d7-42ca-ac23-eb5eea3764b4/resourcegroups/SSVADPDEVRG3401/providers/Microsoft.ManagedIdentity/userAssignedIdentities/SSVADPDEVMI3401-adp-portal-web";
                 o.Credential = new ManagedIdentityCredential(resourid, null);
-                new ManagedIdentityCredential();
                 // o.Credential = new DefaultAzureCredential(
                 // new DefaultAzureCredentialOptions
                 // {
