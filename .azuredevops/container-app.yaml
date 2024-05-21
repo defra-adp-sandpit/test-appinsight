@@ -28,7 +28,7 @@ properties:
           - name: Logging__LogLevel__Default
             value: "Information"
           - name: Logging__LogLevel__Microsoft.AspNetCore
-            value: "Information" 
+            value: "Warning" 
           - name: AppInsights__ConnectionString
             value: "InstrumentationKey=b017c421-8e58-4f3e-8d3c-3f0e2974296a;IngestionEndpoint=https://uksouth-1.in.applicationinsights.azure.com/;LiveEndpoint=https://uksouth.livediagnostics.monitor.azure.com/;ApplicationId=208245fb-288b-45b9-b18f-07c2de588583"       
         resources:
