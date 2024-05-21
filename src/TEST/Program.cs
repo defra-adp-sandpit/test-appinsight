@@ -11,13 +11,18 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddOpenTelemetry().UseAzureMonitor(o =>
             {
+                string userAssignedClientId = "9e5badc8-bb65-4b34-835b-ab2f5117e88e";
                 o.ConnectionString = builder.Configuration.GetValue<string>("AppInsights:ConnectionString");
-                //o.Credential = new DefaultAzureCredential();
+                o.Credential = new DefaultAzureCredential(
+                new DefaultAzureCredentialOptions
+                {
+                    ManagedIdentityClientId = userAssignedClientId
+                });
             });
 builder.Services.ConfigureOpenTelemetryTracerProvider((sp, b) =>
-{
-    b.ConfigureResource(resourceBuilder => resourceBuilder.AddAttributes(new Dictionary<string, object> { { "service.name", "adp-flux-notification-api" } }));
-});
+            {
+                b.ConfigureResource(resourceBuilder => resourceBuilder.AddAttributes(new Dictionary<string, object> { { "service.name", "adp-flux-notification-api" } }));
+            });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
